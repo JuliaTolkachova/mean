@@ -1,0 +1,14 @@
+<h1>{{title}}</h1>
+<nav>
+  <a routerLink="/dashboard"> Dashboard </a>
+  <a routerLink="/heroes"> Heroes </a>
+</nav>
+
+<h2>Our MongoDB is Working!</h2>
+
+<ul>
+  <li *ngFor="let hero of heroes">{{ hero.name }}</li>
+</ul>
+
+<router-outlet></router-outlet>
+<app-messages></app-messages>
