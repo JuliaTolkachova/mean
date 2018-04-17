@@ -16,7 +16,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable()
 export class HeroService {
-private heroesUrl = 'api/heroes';  // url to web api
+  private heroesUrl = 'api/heroes';  // url to web api
 
   constructor(private http: HttpClient,
               private messageService: MessageService) {
@@ -61,7 +61,7 @@ private heroesUrl = 'api/heroes';  // url to web api
       tap(_ => this.log(`found heroes matching "${term}"`)),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
     );
-  }
+}
 
   addHero(hero: Hero): Observable<Hero> {
     return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
@@ -79,14 +79,14 @@ private heroesUrl = 'api/heroes';  // url to web api
     );
   }
 
-
   updateHero(hero: Hero): Observable<any> {
-      return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id}`)),
+    const id = typeof hero === 'number' ? hero : hero._id;
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.put(url, hero, httpOptions).pipe(
+      tap(_ => this.log(`updated hero id=${hero._id}`)),
       catchError(this.handleError<any>('updateHero'))
     );
   }
-
 
  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

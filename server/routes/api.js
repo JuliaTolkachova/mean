@@ -26,14 +26,13 @@ router.get('/heroes', (req, res) => {
   });
 });
 
+
 //get single
 router.get('/heroes/:id', (req, res) => {
-  console.log("get query: " + req.params.id);
   connection((dbo) => {
     let id = req.params.id;
     dbo.collection("heroes").find({'_id': new ObjectId(id)}).toArray(function(err, post) {
       console.log(err);
-      console.log(post);
       if (err) {
         console.log(err);
         return res.sendStatus(500)
@@ -42,6 +41,23 @@ router.get('/heroes/:id', (req, res) => {
     });
   });
 });
+
+
+//search hero
+router.get('/heroes/?name=${term}', (req, res) => {
+    connection((dbo) => {
+    dbo.collection("heroes").createIndex( { name: "text" } );
+    let name = req.body.name;
+    dbo.collection("heroes").find( { $text: { $search: {name: name} } } ,{ score: { $meta: "textScore" }}).sort( { score: { $meta: "textScore" } } ).toArray(function (err, result) {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500)
+      }
+      res.send(result)
+    });
+  });
+});
+
 
 //Create
 router.post('/heroes', (req, res) => {
@@ -59,7 +75,6 @@ router.post('/heroes', (req, res) => {
 
 //Delete
 router.delete('/heroes/:id', (req, res) => {
-  console.log(req.body.name);
     connection((dbo) => {
       let id = req.params.id;
     dbo.collection("heroes").remove({'_id': new ObjectId(id)}, function (err, post) {
@@ -75,8 +90,9 @@ router.delete('/heroes/:id', (req, res) => {
 //Update
 router.put('/heroes/:id', (req, res) => {
     connection((dbo) => {
-      let id = req.body.id;
-    dbo.collection("heroes").updateOne({'_id': new ObjectID(id)}, {$set: {name: req.body.name}}, {returnOriginal: false}, function(err, post){
+      let id = req.params.id;
+      let name = req.body.name;
+    dbo.collection("heroes").updateOne({'_id': new ObjectId(id)}, {$set: {name: name}}, function(err, post){
       if (err) {
         console.log(err);
         return res.sendStatus(500);
@@ -86,5 +102,4 @@ router.put('/heroes/:id', (req, res) => {
   });
 });
 
-
-module.exports = router;
+    module.exports = router;
