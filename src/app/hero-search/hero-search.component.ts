@@ -12,7 +12,7 @@ import { HeroService } from '../hero.service';
   styleUrls: [ './hero-search.component.css' ]
 })
 export class HeroSearchComponent implements OnInit {
-  heroes: Observable<Hero[]>;
+  heroes$: Observable<Hero[]>;
 
 
   private searchTerms = new Subject<string>();
@@ -24,7 +24,7 @@ export class HeroSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.heroes = this.searchTerms.pipe(
+    this.heroes$ = this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((term: string) => this.heroService.searchHeroes(term)),

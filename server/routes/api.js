@@ -32,8 +32,7 @@ router.get('/heroes/:id', (req, res) => {
   connection((dbo) => {
     let id = req.params.id;
     dbo.collection("heroes").find({'_id': new ObjectId(id)}).toArray(function(err, post) {
-      console.log(err);
-      if (err) {
+        if (err) {
         console.log(err);
         return res.sendStatus(500)
       }
@@ -44,20 +43,18 @@ router.get('/heroes/:id', (req, res) => {
 
 
 //search hero
-router.get('/heroes/?name=${term}', (req, res) => {
+router.get('/heroes?name', (req, res) => {
     connection((dbo) => {
-    dbo.collection("heroes").createIndex( { name: "text" } );
-    let name = req.body.name;
-    dbo.collection("heroes").find( { $text: { $search: {name: name} } } ,{ score: { $meta: "textScore" }}).sort( { score: { $meta: "textScore" } } ).toArray(function (err, result) {
-      if (err) {
-        console.log(err);
-        return res.sendStatus(500)
-      }
-      res.send(result)
+    let query = req.query.name;
+    dbo.collection("heroes").find( { name: { $regex: new RegExp(query), $options: 'i'} } ).toArray(function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500)
+    }
+    res.send(result);
     });
-  });
 });
-
+});
 
 //Create
 router.post('/heroes', (req, res) => {
@@ -101,5 +98,6 @@ router.put('/heroes/:id', (req, res) => {
     });
   });
 });
+
 
     module.exports = router;
