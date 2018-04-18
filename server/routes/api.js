@@ -15,6 +15,7 @@ const connection = (closure) => {
 
 // Get heroes
 router.get('/heroes', (req, res) => {
+	console.log("all: " + req.query.name);
   connection((dbo) => {
     dbo.collection("heroes").find({}).toArray(function (err, result) {
       if (err) {
@@ -43,7 +44,8 @@ router.get('/heroes/:id', (req, res) => {
 
 
 //search hero
-router.get('/heroes?name', (req, res) => {
+router.get('/searchheroes', (req, res) => {
+	console.log("search: " + req.query.name);
     connection((dbo) => {
     let query = req.query.name;
     dbo.collection("heroes").find( { name: { $regex: new RegExp(query), $options: 'i'} } ).toArray(function (err, result) {
