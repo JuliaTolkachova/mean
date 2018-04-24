@@ -56,7 +56,7 @@ export class HeroService {
     if (!term.trim()) {
       return of([]);
     }
-    const url = `api/heroes/?name=${term}`;
+    const url = `api/searchheroes?name=${term}`;
     return this.http.get<Hero[]>(url).pipe(
       tap(_ => this.log(`found heroes matching "${term}"`)),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
@@ -66,7 +66,7 @@ export class HeroService {
 
   addHero(hero: Hero): Observable<Hero> {
     return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
-      tap( _ => this.log(`added hero w/ id=${hero.id}`)),
+      tap(_ => this.log(`added hero w/ id=${hero.id}`)),
       catchError(this.handleError<Hero>('addHero'))
     );
   }
@@ -89,7 +89,7 @@ export class HeroService {
     );
   }
 
- private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
       this.log(`${operation} failed: ${error.message}`);
@@ -101,5 +101,3 @@ export class HeroService {
     this.messageService.add('HeroService: ' + message);
   }
 }
-
-

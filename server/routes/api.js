@@ -12,7 +12,6 @@ const connection = (closure) => {
   });
 };
 
-
 // Get heroes
 router.get('/heroes', (req, res) => {
   connection((dbo) => {
@@ -43,7 +42,8 @@ router.get('/heroes/:id', (req, res) => {
 
 
 //search hero
-router.get('/heroes?name', (req, res) => {
+router.get('/searchheroes', (req, res) => {
+  console.log("search: " + req.query.name);
     connection((dbo) => {
     let query = req.query.name;
     dbo.collection("heroes").find( { name: { $regex: new RegExp(query), $options: 'i'} } ).toArray(function (err, result) {
@@ -58,7 +58,18 @@ router.get('/heroes?name', (req, res) => {
 
 //Create
 router.post('/heroes', (req, res) => {
-  connection((dbo) => {
+  let name = req.body.name;
+  req.checkBody('name', 'Name is required').notEmpty().isAlpha();
+
+  let errors = req.validationErrors();
+  if(errors){
+    req.session.errors = errors;
+    req.session.success = false;
+    res.redirect('/heroes');
+  }
+  else{
+    req.session.success = true;
+    connection((dbo) => {
     let name = req.body.name;
     dbo.collection("heroes").insertOne({name: name},function(err,post){
           if (err) {
@@ -68,6 +79,7 @@ router.post('/heroes', (req, res) => {
           res.send(post);
     });
   });
+};
 });
 
 //Delete
@@ -86,17 +98,29 @@ router.delete('/heroes/:id', (req, res) => {
 
 //Update
 router.put('/heroes/:id', (req, res) => {
+  let name = req.body.name;
+  req.checkBody('name', 'Name is required').notEmpty().isAlpha();
+  let errors = req.validationErrors();
+  if (errors) {
+    req.session.errors = errors;
+    req.session.success = false;
+    res.redirect('/heroes');
+  }
+  else {
+    req.session.success = true;
     connection((dbo) => {
       let id = req.params.id;
       let name = req.body.name;
-    dbo.collection("heroes").updateOne({'_id': new ObjectId(id)}, {$set: {name: name}}, function(err, post){
-      if (err) {
-        console.log(err);
-        return res.sendStatus(500);
-      }
-       res.send(post)
+      dbo.collection("heroes").updateOne({'_id': new ObjectId(id)}, {$set: {name: name}}, function (err, post) {
+        if (err) {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+        res.send(post)
+      });
     });
-  });
+  }
+  ;
 });
 
 

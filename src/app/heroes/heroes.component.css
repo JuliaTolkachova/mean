@@ -71,3 +71,28 @@ button.delete {
   background-color: gray !important;
   color: white;
 }
+
+
+
+
+div {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+input + span {
+  padding-right: 30px;
+}
+
+input:invalid+span:after {
+  background: #fdd;
+  position: absolute; content: '✖';
+  padding-left: 5px;
+}
+
+input:valid+span:after {
+  position: absolute;
+  content: '✓';
+  padding-left: 5px;
+  background: #dfd;
+}

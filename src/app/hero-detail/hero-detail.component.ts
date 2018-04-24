@@ -3,6 +3,7 @@ import {Hero} from '../hero';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {HeroService} from '../hero.service';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-hero-detail',
@@ -12,6 +13,7 @@ import {HeroService} from '../hero.service';
 export class HeroDetailComponent implements OnInit {
   @Input() hero: Hero;
 
+
   constructor(
     private route: ActivatedRoute,
     private heroService: HeroService,
@@ -20,6 +22,7 @@ export class HeroDetailComponent implements OnInit {
   ngOnInit(): void {
     this.getHero();
   }
+
   getHero(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.heroService.getHero(id).subscribe(hero => {

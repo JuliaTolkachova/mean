@@ -1,16 +1,25 @@
 <h2>My Heroes</h2>
 
+<p *ngIf="isValidFormSubmitted" [ngClass] = "'success'">
+  Form submitted successfully.
+</p>
+
+<form #heroForm="ngForm" (ngSubmit)="onFormSubmit(heroForm)" method="post" action="">
+
 <div>
   <label>Hero name:
-    <input #heroName />
+    <input #heroName name="heroname"  [ngModel]="" pattern= "[a-zA-Z -]{1,15}" #uname="ngModel">
+    <span class="validity"></span>
+    <div *ngIf="uname.errors && heroForm.submitted && !isValidFormSubmitted" [ngClass] = "'error'">
+      <div *ngIf='!uname.pattern'>
+        User name not valid. Please, enter the letters only of the Latin alphabet.
+      </div>
+          </div>
   </label>
-  <button (click)="add(heroName.value); heroName.value=''">
-    add
-  </button>
+
+  <button (click)=" add(heroName.value); heroName.value=''"> Submit </button>
 </div>
-
-
-
+</form>
 
 <ul class="heroes">
   <li *ngFor="let hero of heroes; let i=index">
@@ -21,11 +30,6 @@
             (click)="delete(hero)">x</button>
   </li>
 </ul>
-
-
-
-
-
 
 
 
