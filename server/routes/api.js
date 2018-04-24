@@ -14,6 +14,7 @@ const connection = (closure) => {
 
 // Get heroes
 router.get('/heroes', (req, res) => {
+	console.log("all: " + req.query.name);
   connection((dbo) => {
     dbo.collection("heroes").find({}).toArray(function (err, result) {
       if (err) {
@@ -43,7 +44,11 @@ router.get('/heroes/:id', (req, res) => {
 
 //search hero
 router.get('/searchheroes', (req, res) => {
+<<<<<<< HEAD
   console.log("search: " + req.query.name);
+=======
+	console.log("search: " + req.query.name);
+>>>>>>> origin/master
     connection((dbo) => {
     let query = req.query.name;
     dbo.collection("heroes").find( { name: { $regex: new RegExp(query), $options: 'i'} } ).toArray(function (err, result) {
