@@ -26,7 +26,6 @@ router.get('/heroes', (req, res) => {
   });
 });
 
-
 //get single
 router.get('/heroes/:id', (req, res) => {
   connection((dbo) => {
@@ -44,11 +43,7 @@ router.get('/heroes/:id', (req, res) => {
 
 //search hero
 router.get('/searchheroes', (req, res) => {
-<<<<<<< HEAD
   console.log("search: " + req.query.name);
-=======
-	console.log("search: " + req.query.name);
->>>>>>> origin/master
     connection((dbo) => {
     let query = req.query.name;
     dbo.collection("heroes").find( { name: { $regex: new RegExp(query), $options: 'i'} } ).toArray(function (err, result) {
@@ -65,7 +60,6 @@ router.get('/searchheroes', (req, res) => {
 router.post('/heroes', (req, res) => {
   let name = req.body.name;
   req.checkBody('name', 'Name is required').notEmpty().isAlpha();
-
   let errors = req.validationErrors();
   if(errors){
     req.session.errors = errors;
@@ -124,9 +118,7 @@ router.put('/heroes/:id', (req, res) => {
         res.send(post)
       });
     });
-  }
-  ;
+  };
 });
-
 
     module.exports = router;
