@@ -26,7 +26,7 @@ export class HeroesComponent implements OnInit {
   onFormSubmit(heroForm: NgForm) {
     this.isValidFormSubmitted = false;
     if (heroForm.invalid) {
-      console.log('Heroname is invalid');
+      console.log('Hero name is not valid');
       alert('Please, enter the letters only of the Latin alphabet!!!');
       return;
     }
@@ -35,7 +35,7 @@ export class HeroesComponent implements OnInit {
     this.heroService.addHero(this.hero);
     this.hero = new Hero();
     heroForm.resetForm();
-    console.log('Heroname is valid' + this.hero.name);
+    console.log('Hero name has added!');
   }
 
   getHeroes(): void {

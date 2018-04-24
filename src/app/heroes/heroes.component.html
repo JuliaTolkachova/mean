@@ -1,7 +1,7 @@
 <h2>My Heroes</h2>
 
 <p *ngIf="isValidFormSubmitted" [ngClass] = "'success'">
-  Form submitted successfully.
+  Hero name has successfully added.
 </p>
 
 <form #heroForm="ngForm" (ngSubmit)="onFormSubmit(heroForm)" method="post" action="">
@@ -12,7 +12,7 @@
     <span class="validity"></span>
     <div *ngIf="uname.errors && heroForm.submitted && !isValidFormSubmitted" [ngClass] = "'error'">
       <div *ngIf='!uname.pattern'>
-        User name not valid. Please, enter the letters only of the Latin alphabet.
+        Hero name is not valid. Please, enter the letters only of the Latin alphabet!
       </div>
           </div>
   </label>
